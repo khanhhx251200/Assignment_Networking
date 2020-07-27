@@ -1,7 +1,6 @@
 package com.example.lab4;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -9,11 +8,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.lab4.api.ApiService;
-import com.example.lab4.api.ApiUtils;
+import com.example.lab4.api.RetrofitClient;
 import com.example.lab4.model.MyModel;
 import com.example.lab4.model.Photo;
 
@@ -32,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private int page = 1;
     List<Photo> list = new ArrayList<>();
+    MyModel myModel = null;
 
 
     @Override
@@ -55,17 +54,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void callAPI() {
-
-        mApiService = ApiUtils.getApiService();
-
-        mApiService.getData(String.valueOf(page)).enqueue(new Callback<MyModel>() {
+        RetrofitClient.getInstance().getData(String.valueOf(page)).enqueue(new Callback<MyModel>() {
             @Override
             public void onResponse(Call<MyModel> call, Response<MyModel> response) {
-                if (response.isSuccessful()) {
-                    MyModel myModel = response.body();
-                    list = Arrays.asList(myModel.getPhotos().getPhoto());
-                    initDataToRecycle(list);
-                }
+                myModel = response.body();
+                Log.e("SSS", "onResponse: " + myModel);
+                list = Arrays.asList(myModel.getPhotos().getPhoto());
+                initDataToRecycle(list);
             }
 
             @Override
@@ -73,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
     }
 
     private void initDataToRecycle(List<Photo> list) {
@@ -91,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         });
         rvAlbumPhotos.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         rvAlbumPhotos.setAdapter(rvWallPaperAdapter);
-        rvWallPaperAdapter.notifyDataSetChanged();
+
     }
 
 
