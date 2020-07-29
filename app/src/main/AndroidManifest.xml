@@ -13,8 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ImageActivity"></activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.GalleriesActivity"></activity>
+        <activity android:name=".activity.CategoryActivity" />
+        <activity android:name=".activity.ImageActivity" />
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

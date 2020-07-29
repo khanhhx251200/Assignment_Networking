@@ -1,4 +1,4 @@
-package com.example.lab4;
+package com.example.lab4.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.example.lab4.R;
 
 public class ImageActivity extends AppCompatActivity {
     private Intent intent;

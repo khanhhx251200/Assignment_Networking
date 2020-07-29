@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 
-public class Photo {
+import java.io.Serializable;
+
+public class Photo implements Serializable {
     @SerializedName("id")
     private String id;
     @SerializedName("owner")
@@ -87,6 +89,10 @@ public class Photo {
     private int widthL;
     @SerializedName("pathalias")
     private String pathalias;
+
+    public Photo(String url) {
+        this.urlL = url;
+    }
 
     public void setId(String id) {
         this.id = id;

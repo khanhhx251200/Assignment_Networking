@@ -1,4 +1,4 @@
-package com.example.lab4;
+package com.example.lab4.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,18 +10,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.lab4.model.MyModel;
+import com.example.lab4.R;
 import com.example.lab4.model.Photo;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Callback;
 
 public class RvWallPaperAdapter extends RecyclerView.Adapter<RvWallPaperAdapter.WallspaperHolder> {
     private Context context;
     private List<Photo> photoList;
     private OnListener onListener;
+
 
     public RvWallPaperAdapter(Context context, List<Photo> photoList, OnListener onListener) {
         this.context = context;
