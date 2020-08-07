@@ -43,6 +43,7 @@ public class GalleriesActivity extends AppCompatActivity {
         initGetData();
         setTitle(title);
         callAPI();
+        initRecycleView();
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -59,9 +60,7 @@ public class GalleriesActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<MyModel> call, Response<MyModel> response) {
                 if (response.isSuccessful()) {
-                    model = response.body();
-                    photoList = Arrays.asList(model.getPhotos().getPhoto());
-                    initRecycleView(photoList);
+                    rvWallPaperAdapter.setData(fetchResult(response));
 
                 }
             }
@@ -73,6 +72,11 @@ public class GalleriesActivity extends AppCompatActivity {
         });
     }
 
+    private List<Photo> fetchResult(Response<MyModel> response) {
+        MyModel myModel = response.body();
+        return Arrays.asList(myModel.getPhotos().getPhoto());
+    }
+
     private void initGetData() {
         Intent intent = getIntent();
         id = intent.getStringExtra("id");
@@ -81,8 +85,8 @@ public class GalleriesActivity extends AppCompatActivity {
 
     }
 
-    private void initRecycleView(List<Photo> photoList) {
-        rvWallPaperAdapter = new RvWallPaperAdapter(this, photoList, new RvWallPaperAdapter.OnListener() {
+    private void initRecycleView() {
+        rvWallPaperAdapter = new RvWallPaperAdapter(this, new RvWallPaperAdapter.OnListener() {
             @Override
             public void onClickItem(Photo photo) {
                 Intent intent = new Intent(GalleriesActivity.this, ImageActivity.class);

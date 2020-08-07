@@ -6,6 +6,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuItemCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -13,14 +14,17 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.lab4.EndlessRecyclerViewScrollListener;
 import com.example.lab4.R;
 import com.example.lab4.adapter.RvWallPaperAdapter;
 import com.example.lab4.api.RetrofitClient;
@@ -39,10 +43,11 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rvAlbumPhotos;
     private RvWallPaperAdapter rvWallPaperAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private ProgressBar progressBar;
     private int page = 1;
     private SearchView searchView;
-    List<Photo> list = new ArrayList<>();
-    MyModel myModel = null;
+
+    boolean isLoading = false;
 
 
     @Override
@@ -52,18 +57,48 @@ public class MainActivity extends AppCompatActivity {
 
         rvAlbumPhotos = findViewById(R.id.rv_album_photos);
         swipeRefreshLayout = findViewById(R.id.srl);
+        progressBar = findViewById(R.id.progressbar);
+
         initActionBar();
+        initDataToRecycle();
         callAPI();
+        refreshLayout();
+        initScrollListener();
+    }
+
+    private void initScrollListener() {
+        rvAlbumPhotos.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                GridLayoutManager gridLayoutManager1 = (GridLayoutManager) rvAlbumPhotos.getLayoutManager();
+
+                if (!isLoading) {
+                    if (gridLayoutManager1 != null && gridLayoutManager1.findLastCompletelyVisibleItemPosition() == rvWallPaperAdapter.getPhotoList().size() - 1) {
+                        isLoading = true;
+                        loadMore();
+                    }
+                }
+            }
+        });
+    }
+
+    private void refreshLayout() {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                page++;
+                page = 0;
                 callAPI();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
-
     }
+
 
     private void initActionBar() {
         ActionBar actionBar = getSupportActionBar();
@@ -71,13 +106,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void callAPI() {
+
         RetrofitClient.getInstance().getData(String.valueOf(page)).enqueue(new Callback<MyModel>() {
             @Override
             public void onResponse(Call<MyModel> call, Response<MyModel> response) {
-                myModel = response.body();
-                Log.e("SSS", "onResponse: " + myModel);
-                list = Arrays.asList(myModel.getPhotos().getPhoto());
-                initDataToRecycle(list);
+                progressBar.setVisibility(View.GONE);
+                rvWallPaperAdapter.setData((List<Photo>) (fetchResult(response)));
             }
 
             @Override
@@ -88,8 +122,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void initDataToRecycle(List<Photo> list) {
-        rvWallPaperAdapter = new RvWallPaperAdapter(MainActivity.this, list, new RvWallPaperAdapter.OnListener() {
+    private List<Photo> fetchResult(Response<MyModel> response) {
+        MyModel myModel = response.body();
+        return Arrays.asList(myModel.getPhotos().getPhoto());
+    }
+
+    private void initDataToRecycle() {
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        rvWallPaperAdapter = new RvWallPaperAdapter(MainActivity.this, new RvWallPaperAdapter.OnListener() {
             @Override
             public void onClickItem(Photo photo) {
                 Intent intent = new Intent(MainActivity.this, ImageActivity.class);
@@ -102,9 +142,52 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Load Server Fail", Toast.LENGTH_SHORT).show();
             }
         });
-        rvAlbumPhotos.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        rvAlbumPhotos.setAdapter(rvWallPaperAdapter);
 
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return rvWallPaperAdapter.getItemViewType(position) == rvWallPaperAdapter.VIEW_TYPE_ITEM ? 1 : 2;
+            }
+        });
+
+        rvAlbumPhotos.setLayoutManager(gridLayoutManager);
+        rvAlbumPhotos.setAdapter(rvWallPaperAdapter);
+    }
+
+    private void loadMore() {
+        rvWallPaperAdapter.addLoadMore();
+        page += 1;
+        loadNextDataFromApi(page);
+
+    }
+
+    private void loadNextDataFromApi(int pages) {
+        RetrofitClient.getInstance().getData(String.valueOf(pages)).enqueue(new Callback<MyModel>() {
+            @Override
+            public void onResponse(Call<MyModel> call, Response<MyModel> response) {
+
+                if (response.isSuccessful()) {
+                    try {
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                isLoading = false;
+                                rvWallPaperAdapter.addData(fetchResult(response));
+
+                            }
+                        }, 2500);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MyModel> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Something went wrong...Please try later!", Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
     @Override

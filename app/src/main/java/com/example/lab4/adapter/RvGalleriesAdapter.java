@@ -56,6 +56,7 @@ public class RvGalleriesAdapter extends RecyclerView.Adapter<RvGalleriesAdapter.
 
     public class GalleriesHolder extends RecyclerView.ViewHolder {
         TextView tvTitle;
+        TextView tvViews;
 
         public GalleriesHolder(@NonNull View itemView) {
             super(itemView);
@@ -64,6 +65,7 @@ public class RvGalleriesAdapter extends RecyclerView.Adapter<RvGalleriesAdapter.
 
         public void bindItem(int position) {
             tvTitle.setText(categoryList.get(position).title);
+
         }
     }
 
