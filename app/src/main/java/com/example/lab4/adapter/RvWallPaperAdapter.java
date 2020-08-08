@@ -69,7 +69,7 @@ public class RvWallPaperAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private void populateItemRows(WallspaperHolder holder, int position) {
 
-        Glide.with(holder.itemView).load(photoList.get(position).getUrlM()).into(((WallspaperHolder) holder).imageView);
+        Glide.with(holder.itemView).load(photoList.get(position).getUrlQ()).into(((WallspaperHolder) holder).imageView);
         holder.tvViews.setText("Views: " + photoList.get(position).getViews());
     }
 

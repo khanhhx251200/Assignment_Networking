@@ -55,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right);
+
         rvAlbumPhotos = findViewById(R.id.rv_album_photos);
         swipeRefreshLayout = findViewById(R.id.srl);
         progressBar = findViewById(R.id.progressbar);
@@ -138,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("urlS", photo.getUrlS());
                 intent.putExtra("title", photo.getTitle());
                 startActivity(intent);
+
             }
 
             @Override
@@ -245,7 +248,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_home:
-
+                page = 0;
+                callAPI();
                 break;
             case R.id.menu_search:
 
@@ -261,4 +265,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
 
     }
+
+
 }

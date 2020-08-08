@@ -1,5 +1,7 @@
 package com.example.lab4.activity;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -7,8 +9,11 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.example.lab4.R;
 import com.example.lab4.adapter.RvWallPaperAdapter;
@@ -25,20 +30,21 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class GalleriesActivity extends AppCompatActivity {
+
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private List<Photo> photoList = new ArrayList<>();
     private RvWallPaperAdapter rvWallPaperAdapter;
     private String id = "";
     private String title = "";
-    private MyModel model;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_galleries);
 
+        overridePendingTransition(R.anim.slide_in_right, 0);
+
+        iconBack();
         initUI();
         initGetData();
         setTitle(title);
@@ -110,5 +116,36 @@ public class GalleriesActivity extends AppCompatActivity {
     private void initUI() {
         recyclerView = findViewById(R.id.rv_galleries);
         swipeRefreshLayout = findViewById(R.id.srl_galleries);
+    }
+
+    private void iconBack() {
+        ActionBar actionBar = getSupportActionBar();
+        Drawable drawable = getResources().getDrawable(R.drawable.ic_baseline_arrow_back_24);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setHomeAsUpIndicator(drawable);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(0, R.anim.slide_out_left);
     }
 }
