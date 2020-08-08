@@ -91,6 +91,9 @@ public class GalleriesActivity extends AppCompatActivity {
             public void onClickItem(Photo photo) {
                 Intent intent = new Intent(GalleriesActivity.this, ImageActivity.class);
                 intent.putExtra("url", photo.getUrlL());
+                intent.putExtra("urlSq", photo.getUrlSq());
+                intent.putExtra("urlS", photo.getUrlS());
+                intent.putExtra("title", photo.getTitle());
                 startActivity(intent);
             }
 

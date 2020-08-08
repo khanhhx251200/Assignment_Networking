@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_set_main_screen"
+        android:title="Đặt làm hình nền" />
+    <item
+        android:id="@+id/menu_down_Sq"
+        android:title="Tải ảnh 75x75"
+        android:icon="@drawable/download"
+        app:showAsAction="collapseActionView">
+
+    </item>
+    <item
+        android:id="@+id/menu_down_S"
+        android:icon="@drawable/download"
+        android:title="Tải ảnh 240x160"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/menu_downL"
+        android:icon="@drawable/download"
+        android:title="Tải ảnh 1024x683"
+        app:showAsAction="always" />
+</menu>
