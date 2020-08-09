@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_in_right);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
         rvAlbumPhotos = findViewById(R.id.rv_album_photos);
         swipeRefreshLayout = findViewById(R.id.srl);
@@ -250,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menu_home:
                 page = 0;
                 callAPI();
+                recreate();
                 break;
             case R.id.menu_search:
 
@@ -258,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, CategoryActivity.class));
                 break;
             case R.id.menu_fanpage:
-
+                startActivity(new Intent(this, FanpageActivity.class));
                 break;
         }
 
@@ -266,5 +267,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void recreate() {
+        super.recreate();
 
+    }
 }
