@@ -42,7 +42,6 @@ public class ImageSaveAsyncTask extends AsyncTask<String, Integer, String> {
 
             }
             String filename = ".jpg";
-            int name = 0;
             String downloadUrlOfImage = strings[0];
             String DIR_NAME = "images";
             File direct =
@@ -58,8 +57,7 @@ public class ImageSaveAsyncTask extends AsyncTask<String, Integer, String> {
             DownloadManager dm = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
             Uri downloadUri = Uri.parse(downloadUrlOfImage);
             DownloadManager.Request request = new DownloadManager.Request(downloadUri);
-            name += 1;
-            String filenames = String.valueOf(name) + filename;
+            String filenames = DIR_NAME + filename;
             request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE)
                     .setAllowedOverRoaming(false)
                     .setTitle(filename)

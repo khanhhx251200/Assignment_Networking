@@ -8,14 +8,12 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,14 +22,12 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.lab4.EndlessRecyclerViewScrollListener;
 import com.example.lab4.R;
 import com.example.lab4.adapter.RvWallPaperAdapter;
 import com.example.lab4.api.RetrofitClient;
 import com.example.lab4.model.MyModel;
 import com.example.lab4.model.Photo;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -270,6 +266,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void recreate() {
         super.recreate();
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(R.anim.slide_out_left, R.anim.slide_out_left);
     }
 }

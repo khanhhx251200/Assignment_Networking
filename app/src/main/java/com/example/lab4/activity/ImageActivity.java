@@ -4,34 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.ActionBar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 
 import android.app.ProgressDialog;
 import android.app.WallpaperManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.transition.ChangeBounds;
-import android.transition.ChangeImageTransform;
-import android.transition.Fade;
-import android.transition.TransitionManager;
-import android.transition.TransitionSet;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -44,13 +30,9 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.model.SharePhoto;
-import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
 
 import java.io.IOException;
-import java.lang.annotation.Target;
-import java.util.concurrent.ExecutionException;
 
 public class ImageActivity extends AppCompatActivity {
     private Intent intent;
@@ -82,18 +64,6 @@ public class ImageActivity extends AppCompatActivity {
         animFadeOut.reset();
         imageView.clearAnimation();
         imageView.startAnimation(animFadeOut);
-
-//        TransitionManager.beginDelayedTransition(transitionsContainer, new TransitionSet()
-//                .addTransition(new ChangeBounds())
-//                .addTransition(new ChangeImageTransform()));
-//
-//        ViewGroup.LayoutParams params = imageView.getLayoutParams();
-//        params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-//        imageView.setLayoutParams(params);
-//
-//        imageView.setScaleType(
-//                ImageView.ScaleType.FIT_CENTER);
-
 
         Glide.with(this).load(urlL).into(imageView);
 
@@ -190,7 +160,7 @@ public class ImageActivity extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(0, R.anim.slide_out_left);
+        overridePendingTransition(0, R.anim.slide_out_right);
     }
 
     @Override

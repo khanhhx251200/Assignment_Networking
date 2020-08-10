@@ -179,6 +179,6 @@ public class FanpageActivity extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(0, R.anim.slide_out_left);
+        overridePendingTransition(0, R.anim.slide_out_right);
     }
 }

@@ -15,20 +15,13 @@ import android.view.MenuItem;
 
 import com.example.lab4.R;
 import com.example.lab4.adapter.RvGalleriesAdapter;
-import com.example.lab4.api.RetrofitClient;
 import com.example.lab4.model.Category;
 import com.example.lab4.model.MyModel;
 import com.example.lab4.model.Photo;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class CategoryActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -150,6 +143,6 @@ public class CategoryActivity extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(0, R.anim.slide_out_left);
+        overridePendingTransition(0, R.anim.slide_out_right);
     }
 }
